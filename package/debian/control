@@ -1,0 +1,29 @@
+Source: rtpproxy-codecs
+Priority: optional
+Maintainer: Jonathan de Boyne Pollard <jonathan.de.boyne.pollard@cloudcall.com>
+Build-Depends: redo, xmlto, pax
+
+Package: libbcg729-dev
+Section: devel
+Architecture: amd64
+Depends:
+Suggests: 
+Recommends: 
+Description: Belledonne Communications' G.729 codec library for RTPproxy
+
+Package: libg722-dev
+Section: devel
+Architecture: amd64
+Depends:
+Suggests: 
+Recommends: 
+Description: G.722 codec library for RTPproxy
+
+Package: libsrtp-dev
+Section: devel
+Architecture: amd64
+Depends:
+Suggests: 
+Recommends: 
+Description: Cisco SRTP codec library for RTPproxy
+

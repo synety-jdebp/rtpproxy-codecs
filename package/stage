@@ -1,0 +1,75 @@
+#!/bin/sh -e
+# See http://skarnet.org./software/compile.html
+if [ \! -d package ] || [ \! -d source ] 
+then
+	echo "You are not in the right directory." 1>&2 
+	exit 100
+fi
+if ! test $# -ge 2
+then
+	echo "Two arguments are required." 1>&2 
+	exit 100
+fi
+
+src="${1}"
+dest="${2}"
+absdest="`readlink -f "${dest}"`/"
+
+##########################################################
+# distributor patchable stuff
+
+# Eventually, these will be /usr .
+binprefix="/usr/local"
+libprefix="/usr/local"
+incprefix="/usr/local"
+# Eventually, these will be /usr/share .
+manprefix="/usr/local"
+docprefix="/usr/local/share"
+# Eventually, this will be / .
+etcprefix="/usr/local"
+# Eventually, this will be /usr/share .
+prsprefix="/usr/local/etc"
+
+# Set this to blank or unset it if /usr/{s,}bin and /{s,}bin are identical.
+case "`uname`" in
+Linux)	
+	# These get us *only* the operating system variables, safely.
+	read_os() { /bin/exec clearenv read-conf /etc/os-release "`which printenv`" "$1" ; }
+
+	case "`read_os ID`:`read_os VERSION_ID`" in
+	arch:*) 	split_os="" ;;
+	centos:*)	split_os="" ;;
+	rhel:*) 	split_os="" ;;
+	*)      	split_os="YES" ;;
+	esac
+	;;
+*BSD)	split_os="YES" ;;
+esac
+
+##########################################################
+# binaries and headers
+for l in bcg729 srtp g722
+do
+	i=lib"${l}".a
+	install -d -m 0755 "${dest}"/"lib${l}"-dev/"${libprefix}"/lib 
+	install -d -m 0755 "${dest}"/"lib${l}"-dev/"${incprefix}"/include 
+	ln -f -- "${src}"/library/"$i" "${dest}"/"lib${l}"-dev/"${libprefix}"/lib/ 
+done
+for l in srtp
+do
+	install -d -m 0755 "${dest}"/"lib${l}"-dev/"${incprefix}"/include/"${l}"2
+	while read -r i
+	do
+		bi="`basename "$i"`"
+		ln -f -- "${src}"/include/"${l}"2/"${bi}" "${dest}"/"lib${l}"-dev/"${libprefix}"/include/"${l}"2/"${bi}"
+	done < package/lib"${l}".includes
+done
+for l in bcg729 g722
+do
+	while read -r i
+	do
+		install -d -m 0755 "${dest}"/"lib${l}"-dev/"${libprefix}"/include/"`dirname "${i}"`"
+		ln -f -- "${src}"/include/"${i}" "${dest}"/"lib${l}"-dev/"${libprefix}"/include/"${i}"
+	done < package/lib"${l}".includes
+done
+

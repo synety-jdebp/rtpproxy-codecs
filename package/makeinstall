@@ -1,0 +1,77 @@
+#!/bin/sh -e
+# See http://skarnet.org./software/compile.html
+if [ \! -d package ] || [ \! -d source ]
+then
+	echo "You are not in the right directory." 1>&2
+	exit 100
+fi
+if [ \! -d build ]
+then
+	echo "You have not prepared the build area." 1>&2
+	exit 100
+fi
+
+# Atomically update the release directories ./manual, ./library, ./include, and so forth.
+# The build and release directories need not be on the same disc volume.
+# And the files released must not be potentially overwritable and truncatable by the compiler/linker during subsequent builds.
+# But released files can be links to other released files, of course.
+install -d -m 0755 library include manual
+
+# ##############################################################################
+# Build all of the ...{new} files in ./library, ./include, and ./manual.
+for l in bcg729 srtp g722
+do
+	i=lib"$l".a
+	rm -f -- library/"$i"{new}
+	install -m 0444 -- build/"$i" library/"$i"{new}
+done
+for l in srtp
+do
+	install -d -m 0755 -- include/srtp2
+	while read -r i
+	do
+		bi="`basename "$i"`"
+		rm -f -- include/srtp2/"${bi}"{new}
+		install -m 0444 -- build/lib"$l"/"${i}" include/"${l}"2/"${bi}"{new}
+	done < package/lib"${l}".includes
+done
+for l in g722
+do
+	while read -r i
+	do
+		rm -f -- include/"$i"{new}
+		install -m 0444 -- build/lib"$l"/"${i}" include/"${i}"{new}
+	done < package/lib"${l}".includes
+done
+for l in bcg729
+do
+	while read -r i
+	do
+		rm -f -- include/"$i"{new}
+		install -d -m 0755 "include/`dirname "$i"`"
+		install -m 0444 -- build/lib"$l"/include/"${i}" include/"${i}"{new}
+	done < package/lib"${l}".includes
+done
+
+# ##############################################################################
+# Rename the ...{new} files in ./library, ./include, and ./manual.
+for l in srtp bcg729 g722
+do
+	i=lib"$l".a
+	mv -f -- library/"$i"{new} library/"$i"
+done
+for l in srtp
+do
+	while read -r i
+	do
+		bi="`basename "$i"`"
+		mv -f -- include/"${l}"2/"${bi}"{new} include/"${l}"2/"${bi}"
+	done < package/lib"${l}".includes
+done
+for l in bcg729 g722
+do
+	while read -r i
+	do
+		mv -f -- include/"${i}"{new} include/"${i}"
+	done < package/lib"${l}".includes
+done

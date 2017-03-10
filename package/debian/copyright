@@ -1,0 +1,23 @@
+Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
+Name: rtpproxy-codecs
+Maintainer: Jonathan de Boyne Pollard <jonathan.de.boyne.pollard@cloudcall.com>
+
+Copyright: 2017 CloudCall
+License: see source/COPYING
+
+Files: source/libbcg729/*
+Copyright: 2012 Belledonne Communications SARL.
+License: see source/libbcg729/COPYING
+
+Files: source/libg722/*
+Copyright: 2005 Steve Underwood
+Copyright: 2014-2016 Sippy Software, Inc., http://www.sippysoft.com
+License: see source/libg722/LICENSE
+
+Files: source/libsrtp/*
+Copyright: 2001-2006 Cisco Systems, Inc.
+License: see source/libsrtp/LICENSE
+
+Files: package/*
+Copyright: 2017 CloudCall
+License: see package/COPYING

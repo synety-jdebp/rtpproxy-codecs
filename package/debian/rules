@@ -1,0 +1,42 @@
+#!/usr/bin/make -sf
+
+.PHONY: build binary install clean stage control
+
+BINARY_PACKAGES=bcg729 g722 srtp
+
+# The Debian package builder targets this in order to make the package contents.
+build:
+	package/compile
+
+# The Debian package builder targets this in order to clean the build areas.
+clean:
+	${RM} debian/files debian/substvars
+	for i in ${BINARY_PACKAGES} ; \
+	do \
+		${RM} -r debian/lib"$$i"-dev/ || exit 1 ; \
+	done
+	${RM} -r debian/tmp/
+
+# The Debian package builder targets this in order to make the .deb files.
+binary: stage control
+	for i in ${BINARY_PACKAGES} ; \
+	do \
+		dpkg -b debian/lib"$$i"-dev ../ || exit 1 ; \
+	done
+
+stage:
+	echo 1>&2 "Copying slashpackage image."
+	install -d -m 0755 debian/tmp
+	pax -r -w -l library include manual debian/tmp/
+	echo 1>&2 "Staging from debian/tmp/"
+	package/stage debian/tmp debian
+
+control:
+	${RM} debian/files
+	for i in ${BINARY_PACKAGES} ; \
+	do \
+		echo 1>&2 "Building control file for lib$$i-dev." ; \
+		install -d -m 0755 debian/lib"$$i"-dev/DEBIAN || exit 1 ; \
+		${RM} debian/substvars ; \
+		dpkg-gencontrol -plib"$$i"-dev -Pdebian/lib"$$i"-dev || exit 1 ; \
+	done
