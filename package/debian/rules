@@ -27,7 +27,7 @@ binary: stage control
 stage:
 	echo 1>&2 "Copying slashpackage image."
 	install -d -m 0755 debian/tmp
-	pax -r -w -l library include manual debian/tmp/
+	pax -r -w -l library include manual config debian/tmp/
 	echo 1>&2 "Staging from debian/tmp/"
 	package/stage debian/tmp debian
 

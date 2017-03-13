@@ -61,15 +61,29 @@ do
 	while read -r i
 	do
 		bi="`basename "$i"`"
-		ln -f -- "${src}"/include/"${l}"2/"${bi}" "${dest}"/"lib${l}"-dev/"${libprefix}"/include/"${l}"2/"${bi}"
+		ln -f -- "${src}"/include/"${l}"2/"${bi}" "${dest}"/"lib${l}"-dev/"${incprefix}"/include/"${l}"2/"${bi}"
 	done < package/lib"${l}".includes
 done
 for l in bcg729 g722
 do
 	while read -r i
 	do
-		install -d -m 0755 "${dest}"/"lib${l}"-dev/"${libprefix}"/include/"`dirname "${i}"`"
-		ln -f -- "${src}"/include/"${i}" "${dest}"/"lib${l}"-dev/"${libprefix}"/include/"${i}"
+		install -d -m 0755 "${dest}"/"lib${l}"-dev/"${incprefix}"/include/"`dirname "${i}"`"
+		ln -f -- "${src}"/include/"${i}" "${dest}"/"lib${l}"-dev/"${incprefix}"/include/"${i}"
 	done < package/lib"${l}".includes
+done
+
+##########################################################
+# pkg-config stuff
+for l in srtp
+do
+	install -d -m 0755 "${dest}"/"lib${l}"-dev/"${docprefix}"/pkgconfig
+	install -m 0444 "${src}"/config/lib"${l}"2.pc "${dest}"/lib"${l}"-dev/"${docprefix}"/pkgconfig/lib"${l}"2.pc
+done
+for l in bcg729
+do
+	install -d -m 0755 "${dest}"/"lib${l}"-dev/"${docprefix}"/pkgconfig
+	install -m 0644 /dev/null "${dest}"/lib"${l}"-dev/"${docprefix}"/pkgconfig/lib"${l}".pc
+	sed -e "s!@prefix@!${binprefix}!g" -e "s!@exec_prefix@!${binprefix}!g" -e "s!@includedir@!${incprefix}!g" -e "s!@libdir@!${libprefix}!g" "${src}"/config/lib"${l}".pc.in > "${dest}"/lib"${l}"-dev/"${docprefix}"/pkgconfig/lib"${l}".pc
 done
 
