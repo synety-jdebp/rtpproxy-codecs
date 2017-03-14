@@ -1,7 +1,7 @@
 Source: rtpproxy-codecs
 Priority: optional
 Maintainer: Jonathan de Boyne Pollard <jonathan.de.boyne.pollard@cloudcall.com>
-Build-Depends: redo, xmlto, pax
+Build-Depends: redo, xmlto, pax, cmake, gcc
 
 Package: libbcg729-dev
 Section: devel
