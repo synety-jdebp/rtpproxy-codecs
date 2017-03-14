@@ -1,9 +1,9 @@
 [submodule "source/bcg729"]
 	path = source/bcg729
-	url = git@github.com:synety-jdebp/bcg729.git
+	url = https://github.com/synety-jdebp/bcg729.git
 [submodule "source/libg722"]
 	path = source/libg722
-	url = git@github.com:synety-jdebp/libg722.git
+	url = https://github.com/synety-jdebp/libg722.git
 [submodule "source/libsrtp"]
 	path = source/libsrtp
-	url = git@github.com:synety-jdebp/libsrtp.git
+	url = https://github.com/synety-jdebp/libsrtp.git
