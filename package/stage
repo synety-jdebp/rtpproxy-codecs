@@ -50,13 +50,13 @@ esac
 # binaries and headers
 for l in bcg729 srtp g722
 do
-	i=lib"${l}".a
 	install -d -m 0755 "${dest}"/"lib${l}"-dev/"${libprefix}"/lib 
 	install -d -m 0755 "${dest}"/"lib${l}"-dev/"${incprefix}"/include 
-	ln -f -- "${src}"/library/"$i" "${dest}"/"lib${l}"-dev/"${libprefix}"/lib/ 
 done
 for l in srtp
 do
+	i=lib"${l}"2.a
+	ln -f -- "${src}"/library/"$i" "${dest}"/"lib${l}"-dev/"${libprefix}"/lib/ 
 	install -d -m 0755 "${dest}"/"lib${l}"-dev/"${incprefix}"/include/"${l}"2
 	while read -r i
 	do
@@ -66,6 +66,8 @@ do
 done
 for l in bcg729 g722
 do
+	i=lib"${l}".a
+	ln -f -- "${src}"/library/"$i" "${dest}"/"lib${l}"-dev/"${libprefix}"/lib/ 
 	while read -r i
 	do
 		install -d -m 0755 "${dest}"/"lib${l}"-dev/"${incprefix}"/include/"`dirname "${i}"`"
