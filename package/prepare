@@ -8,4 +8,10 @@ fi
 
 # Create and populate the build directory.
 install -d -m 0755 build
-( cd source && ( 2>/dev/null pax -w -r -l -u -- * ../build/ || true ) )
+if test -r /etc/redhat-release
+then
+	paxlink=""
+else
+	paxlink="-l"
+fi
+( cd source && ( 2>/dev/null pax -w -r ${paxlink} -u -- * ../build/ || true ) )
