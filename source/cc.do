@@ -8,7 +8,7 @@ then
 elif type >/dev/null gcc
 then
 	cc="gcc"
-	ccflags="-g -pthread -std=gnu11 -Os -Wall -Wextra -Wshadow -Wcast-qual -Wsynth -Woverloaded-virtual -Wcast-align"
+	ccflags="-g -pthread -std=gnu11 -Os -Wall -Wextra -Wshadow -Wcast-qual -Wcast-align"
 else
 	echo 1>&2 "Cannot find clang or gcc."
 	exit 100
