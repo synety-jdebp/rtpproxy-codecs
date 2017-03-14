@@ -57,8 +57,6 @@ do
 done
 for l in srtp
 do
-	rm -f -- "${dest}"/"lib${l}"-dev/"${incprefix}"/include/"${l}"
-	ln -s -- "${l}"2 "${dest}"/"lib${l}"-dev/"${incprefix}"/include/"${l}"
 	install -d -m 0755 "${dest}"/"lib${l}"-dev/"${incprefix}"/include/"${l}"2
 	while read -r i
 	do
