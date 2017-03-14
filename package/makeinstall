@@ -27,11 +27,13 @@ do
 done
 for l in srtp
 do
-	install -d -m 0755 -- include/srtp2
+	rm -f -- include/"${l}"{new}
+	ln -s -- "${l}"2 include/"${l}"{new}
+	install -d -m 0755 -- include/"${l}"2
 	while read -r i
 	do
 		bi="`basename "$i"`"
-		rm -f -- include/srtp2/"${bi}"{new}
+		rm -f -- include/"${l}"2/"${bi}"{new}
 		install -m 0444 -- build/lib"$l"/"${i}" include/"${l}"2/"${bi}"{new}
 	done < package/lib"${l}".includes
 done
@@ -72,6 +74,7 @@ do
 done
 for l in srtp
 do
+	mv -f -- include/"${l}"{new} include/"${l}"
 	while read -r i
 	do
 		bi="`basename "$i"`"
